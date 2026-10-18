@@ -24,7 +24,7 @@
 </style>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
-<title>RPM Sound - Base Checked</title>
+<title>RPM Sound - Fixed Video</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
 body{background:#000;color:#fff;min-height:100vh}
@@ -36,9 +36,8 @@ body{background:#000;color:#fff;min-height:100vh}
 select,input[type="file"]{background:#000;color:#FFEB00;border:2px solid #FFEB00;border-radius:10px;padding:11px 12px;font-weight:700;width:100%}
 .btn{background:#FFEB00;color:#000;border:none;border-radius:14px;padding:14px 18px;font-weight:900;font-size:14px;letter-spacing:1px;cursor:pointer;width:100%;box-shadow:0 0 15px rgba(255,235,0,0.4)}
 .btn-black{background:#000;color:#FFEB00;border:2px solid #FFEB00}
-.btn:active{transform:scale(0.98)}
 .rpm-display{background:#000;border:3px solid #FFEB00;border-radius:20px;padding:20px;text-align:center}
-.rpm-number{font-size:64px;font-weight:900;color:#FFEB00;line-height:1;letter-spacing:-1px;min-height:64px}
+.rpm-number{font-size:64px;font-weight:900;color:#FFEB00;line-height:1;min-height:64px}
 .rpm-label{color:#FFEB00;letter-spacing:3px;font-size:11px;margin-top:6px}
 canvas{width:100%;height:88px;background:#000;border-radius:12px;border:1px solid #333;margin-top:10px}
 .hint{font-size:11px;color:#777;margin-top:8px;line-height:1.4}
@@ -49,65 +48,48 @@ canvas{width:100%;height:88px;background:#000;border-radius:12px;border:1px soli
 .mini-box{background:#000;border:1px solid #333;border-radius:12px;padding:10px}
 .mini-box .label{font-size:9px;color:#666;letter-spacing:1.5px}
 .mini-box .value{font-size:20px;font-weight:900;color:#FFEB00;margin-top:2px}
-.table{width:100%;border-collapse:collapse;margin-top:8px}
-.table td{padding:6px 4px;border-bottom:1px solid #222;font-size:12px}
-.table td:last-child{color:#FFEB00;font-weight:800;text-align:right}
 .file-meta{font-size:12px;color:#aaa;margin-top:8px}
 video{width:100%;border-radius:12px;border:2px solid #333;margin-top:10px;max-height:280px;background:#000}
 .formats{font-size:10px;color:#666;margin-top:6px;letter-spacing:1px}
-.features{font-size:10px;color:#555;line-height:1.5;white-space:pre-wrap}
+.status{font-size:12px;color:#FFEB00;margin-top:8px;font-weight:700}
 </style>
 </head>
 <body>
-<div class="topbar"><div>⚡ RPM SOUND</div><div style="font-size:10px">BASE CHECKED • NO 3600 DEMO</div></div>
+<div class="topbar"><div>⚡ RPM SOUND</div><div style="font-size:10px">VIDEO FIX • BASE CHECKED</div></div>
 <div class="wrap">
 
-<!-- 1,2,3 - ENGINE SELECTION -->
 <div class="card">
-<h2>Engine Selection <span class="badge">BASE LIST</span></h2>
-<div class="row">
-<div style="flex:1;min-width:180px">
-<label style="font-size:9px;color:#666;letter-spacing:1px">ENGINE / FAN TYPE</label>
+<h2>Engine Selection</h2>
 <select id="engineType">
-<optgroup label="4-Stroke Engines (Base List)">
+<optgroup label="4-Stroke Engines">
 <option value="4S-1" selected>4-stroke single</option>
 <option value="4S-2">4-stroke twin</option>
 <option value="4S-3">4-stroke triple</option>
 <option value="4S-4">4-stroke 4 cylinder</option>
 <option value="4S-6">4-stroke 6 cylinder</option>
 </optgroup>
-<optgroup label="Fan Selection Sub-Category (Base List)">
+<optgroup label="Fan Selection Sub-Category">
 <option value="FAN-TRI-SLIM">tri-blade slim blade</option>
 <option value="FAN-TRI-WIDE">tri-blade wide</option>
 <option value="FAN-TWIN-SLIM">twin-blade slim</option>
 <option value="FAN-TWIN-WIDE">twin-blade wide</option>
 </optgroup>
 </select>
-</div>
-<div style="flex:0.6;min-width:120px">
-<label id="countLabel" style="font-size:9px;color:#666">AUTO COUNT</label>
-<select id="count" disabled style="opacity:0.6">
-<option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="6">6</option>
-</select>
-</div>
-</div>
 <div class="hint" id="formulaHint">Formula: 4-stroke single → RPM = freq × 120 / 1</div>
 </div>
 
-<!-- 6 - QUIET MOTOR -->
 <div class="card">
-<h2>Quiet Motor <span class="badge">SENSITIVITY</span></h2>
+<h2>Quiet Motor Checkbox</h2>
 <div class="quiet-box">
 <input type="checkbox" id="quietMode"/>
 <div>
-<div style="font-weight:900;color:#FFEB00;font-size:13px">quiet motor checkbox - increases sensitivity of Mic</div>
-<div style="font-size:11px;color:#aaa">Boosts gain 3×, lowers threshold, FFT 4096. Use for fans & quiet engines.</div>
+<div style="font-weight:900;color:#FFEB00;font-size:13px">quiet motor - increases sensitivity of Mic</div>
+<div style="font-size:11px;color:#aaa">Boosts gain 3×, lowers threshold, FFT 4096 for fans & quiet engines.</div>
 <div id="quietStatus" style="font-size:11px;color:#FFEB00;margin-top:4px;display:none">🔊 HIGH SENSITIVITY ACTIVE</div>
 </div>
 </div>
 </div>
 
-<!-- 1 - LIVE RPM TOGGLE + RESET -->
 <div class="card rpm-display">
 <div class="rpm-number" id="rpmNum">----</div>
 <div class="rpm-label">LIVE RPM • <span id="freqNum">-- Hz</span></div>
@@ -116,112 +98,75 @@ video{width:100%;border-radius:12px;border:2px solid #333;margin-top:10px;max-he
 <div class="mini-box"><div class="label">LIVE TICK COUNTER</div><div class="value" id="tickCount">0</div></div>
 <div class="mini-box"><div class="label">FIRING / SEC</div><div class="value" id="firingRate">--</div></div>
 </div>
+<div class="grid2" style="margin-top:10px;text-align:left">
+<div class="mini-box"><div class="label">LIVE FIRING & ROTATION - ROT</div><div class="value" id="rotBox">--</div></div>
+<div class="mini-box"><div class="label">FIRING EVENTS</div><div class="value" id="fireBox">--</div></div>
+</div>
 <div class="row" style="margin-top:14px">
 <button class="btn" id="toggleMic">▶ LIVE RPM TOGGLE</button>
 <button class="btn btn-black" id="resetBtn" style="flex:0.5">↺ RESET</button>
 </div>
-<div class="hint">Toggle starts/stops mic. Reset sets RPM to ---- and engine back to default.</div>
 </div>
 
-<!-- 5 - LIVE FIRING & ROTATION BOX -->
 <div class="card">
-<h2>Live Firing & Rotation Box <span class="badge">BASE #5</span></h2>
-<div class="grid2">
-<div class="mini-box"><div class="label">ROTATIONS</div><div class="value" id="rotBox">--</div></div>
-<div class="mini-box"><div class="label">FIRING EVENTS</div><div class="value" id="fireBox">--</div></div>
-<div class="mini-box"><div class="label">DETECTED FREQ</div><div class="value" id="freqBox">-- Hz</div></div>
-<div class="mini-box"><div class="label">BLADE/PULSE TYPE</div><div class="value" id="typeBox" style="font-size:13px">4S-1</div></div>
-</div>
-</div>
-
-<!-- 8 - LIVE FIRING DATA WITH DIFFERENT ENGINE CONFIGS -->
-<div class="card">
-<h2>Live Firing Data - All Configs <span class="badge">BASE #8 CROSS-CHECK</span></h2>
-<div style="font-size:11px;color:#777;margin-bottom:6px">If you chose wrong engine, look here - one of these will be in correct range, then switch to it.</div>
-<table class="table" id="configTable">
-<tr><td>4-stroke single</td><td id="c-4S-1">----</td></tr>
-<tr><td>4-stroke twin</td><td id="c-4S-2">----</td></tr>
-<tr><td>4-stroke triple</td><td id="c-4S-3">----</td></tr>
-<tr><td>4-stroke 4 cylinder</td><td id="c-4S-4">----</td></tr>
-<tr><td>4-stroke 6 cylinder</td><td id="c-4S-6">----</td></tr>
-<tr><td>tri-blade slim blade</td><td id="c-FAN-TRI-SLIM">----</td></tr>
-<tr><td>tri-blade wide</td><td id="c-FAN-TRI-WIDE">----</td></tr>
-<tr><td>twin-blade slim</td><td id="c-FAN-TWIN-SLIM">----</td></tr>
-<tr><td>twin-blade wide</td><td id="c-FAN-TWIN-WIDE">----</td></tr>
-</table>
-</div>
-
-<!-- UPLOAD -->
-<div class="card">
-<h2>Upload Video / Sound <span class="badge">VIDEO SUPPORT</span></h2>
+<h2>Upload Video / Sound</h2>
 <input type="file" id="fileInput" accept="audio/*,video/*,.mp4,.mov,.m4v,.avi,.mkv,.mp3,.wav,.m4a,.aac,.webm,.ogg"/>
 <div class="formats">SUPPORTED: MP4 • MOV • M4V • AVI • MKV • WEBM • MP3 • WAV • M4A • AAC • OGG</div>
 <div class="file-meta" id="fileMeta"></div>
-<video id="fileVideo" controls playsinline style="display:none"></video>
+<video id="fileVideo" controls playsinline preload="metadata" style="display:none"></video>
+<div class="status" id="videoStatus"></div>
 <button class="btn" id="analyzeFile" style="display:none;margin-top:10px">▶ ANALYZE FILE</button>
-</div>
-
-<!-- FEATURES INFO FOR YOU -->
-<div class="card">
-<h2>Features Info (for you)</h2>
-<div class="features" id="featuresInfo">Checking base list...
-</div>
+<div class="hint">After hitting ANALYZE, video should play and seconds should count. If not, check status message below.</div>
 </div>
 
 </div>
 
 <script>
-let audioCtx, analyser, gainNode, sourceNode, raf, isRunning=false;
-let tickCounter=0, lastFreq=0;
+let audioCtx, analyser, gainNode, micSource, fileSource = null, raf, isRunning=false, tickCounter=0;
 const engineTypeEl=document.getElementById('engineType');
-const countEl=document.getElementById('count');
-const formulaEl=document.getElementById('formulaHint');
 const rpmEl=document.getElementById('rpmNum');
 const freqEl=document.getElementById('freqNum');
 const tickEl=document.getElementById('tickCount');
 const firingEl=document.getElementById('firingRate');
 const rotBox=document.getElementById('rotBox');
 const fireBox=document.getElementById('fireBox');
-const freqBox=document.getElementById('freqBox');
-const typeBox=document.getElementById('typeBox');
 const quietEl=document.getElementById('quietMode');
 const canvas=document.getElementById('wave');
 const ctx2=canvas.getContext('2d');
+const videoEl=document.getElementById('fileVideo');
+const statusEl=document.getElementById('videoStatus');
 
 function resize(){canvas.width=canvas.clientWidth*2;canvas.height=88*2}
 resize();window.addEventListener('resize',resize);
 
 const baseMap={
-  '4S-1':{cyl:1,type:'4S',label:'4-stroke single'},
-  '4S-2':{cyl:2,type:'4S',label:'4-stroke twin'},
-  '4S-3':{cyl:3,type:'4S',label:'4-stroke triple'},
-  '4S-4':{cyl:4,type:'4S',label:'4-stroke 4 cylinder'},
-  '4S-6':{cyl:6,type:'4S',label:'4-stroke 6 cylinder'},
-  'FAN-TRI-SLIM':{cyl:3,type:'FAN',label:'tri-blade slim blade'},
-  'FAN-TRI-WIDE':{cyl:3,type:'FAN',label:'tri-blade wide'},
-  'FAN-TWIN-SLIM':{cyl:2,type:'FAN',label:'twin-blade slim'},
-  'FAN-TWIN-WIDE':{cyl:2,type:'FAN',label:'twin-blade wide'},
+  '4S-1':{cyl:1,type:'4S'},
+  '4S-2':{cyl:2,type:'4S'},
+  '4S-3':{cyl:3,type:'4S'},
+  '4S-4':{cyl:4,type:'4S'},
+  '4S-6':{cyl:6,type:'4S'},
+  'FAN-TRI-SLIM':{cyl:3,type:'FAN'},
+  'FAN-TRI-WIDE':{cyl:3,type:'FAN'},
+  'FAN-TWIN-SLIM':{cyl:2,type:'FAN'},
+  'FAN-TWIN-WIDE':{cyl:2,type:'FAN'},
 };
 
 function updateFormula(){
   const cfg=baseMap[engineTypeEl.value];
   if(!cfg) return;
-  countEl.value=cfg.cyl;
-  const txt=cfg.type==='FAN'?`RPM = freq × 60 / ${cfg.cyl} (${cfg.label})`:`RPM = freq × 120 / ${cfg.cyl} (${cfg.label})`;
-  formulaEl.textContent=`Formula: ${txt}`;
-  typeBox.textContent=engineTypeEl.value;
+  const txt=cfg.type==='FAN'?`RPM = freq × 60 / ${cfg.cyl} (${engineTypeEl.options[engineTypeEl.selectedIndex].text})`:`RPM = freq × 120 / ${cfg.cyl} (${engineTypeEl.options[engineTypeEl.selectedIndex].text})`;
+  document.getElementById('formulaHint').textContent=`Formula: ${txt}`;
 }
-engineTypeEl.addEventListener('change',updateFormula);
-updateFormula();
+engineTypeEl.addEventListener('change',updateFormula); updateFormula();
 
 quietEl.addEventListener('change',()=>{
-  const isQuiet=quietEl.checked;
-  document.getElementById('quietStatus').style.display=isQuiet?'block':'none';
-  if(analyser){analyser.fftSize=isQuiet?4096:2048; gainNode.gain.value=isQuiet?3:1;}
+  document.getElementById('quietStatus').style.display=quietEl.checked?'block':'none';
+  if(analyser){analyser.fftSize=quietEl.checked?4096:2048; gainNode.gain.value=quietEl.checked?3:1;}
 });
 
 function ensureAudio(){
   if(!audioCtx){audioCtx=new (window.AudioContext||window.webkitAudioContext)();}
+  if(audioCtx.state==='suspended') audioCtx.resume();
   analyser=audioCtx.createAnalyser();
   analyser.fftSize=quietEl.checked?4096:2048;
   gainNode=audioCtx.createGain();
@@ -229,9 +174,9 @@ function ensureAudio(){
   gainNode.connect(analyser);
 }
 
-function freqToRpmForConfig(freq, key){
+function freqToRpm(freq){
   if(!freq) return 0;
-  const cfg=baseMap[key]; if(!cfg) return 0;
+  const cfg=baseMap[engineTypeEl.value]; if(!cfg) return 0;
   if(cfg.type==='FAN') return freq*60/cfg.cyl;
   return freq*120/cfg.cyl;
 }
@@ -252,29 +197,22 @@ function autoCorrelate(buf, sampleRate){
 }
 
 function loop(){
+  if(!analyser) return;
   const buf=new Float32Array(analyser.fftSize);
   analyser.getFloatTimeDomainData(buf);
   const freq=autoCorrelate(buf, audioCtx.sampleRate);
   if(freq>0 && freq>12 && freq<2000){
-    lastFreq=freq;
     tickCounter++;
-    const currentRpm=Math.round(freqToRpmForConfig(freq, engineTypeEl.value));
-    if(currentRpm>0 && currentRpm<25000){
-      rpmEl.textContent=currentRpm;
+    const rpm=Math.round(freqToRpm(freq));
+    if(rpm>0 && rpm<25000){
+      rpmEl.textContent=rpm;
       freqEl.textContent=freq.toFixed(1)+' Hz';
-      freqBox.textContent=freq.toFixed(1)+' Hz';
-      firingEl.textContent=freq.toFixed(1)+' /s';
       tickEl.textContent=tickCounter;
-      rotBox.textContent=currentRpm+' rpm';
+      firingEl.textContent=freq.toFixed(1)+' /s';
+      rotBox.textContent=rpm+' rpm';
       fireBox.textContent=Math.round(freq*60)+' /min';
-      // update all configs table
-      for(const k in baseMap){
-        const el=document.getElementById('c-'+k);
-        if(el) el.textContent=Math.round(freqToRpmForConfig(freq,k))+' rpm';
-      }
     }
   }
-  // waveform
   ctx2.fillStyle='#000';ctx2.fillRect(0,0,canvas.width,canvas.height);
   ctx2.strokeStyle='#FFEB00';ctx2.lineWidth=2;ctx2.beginPath();
   const slice=canvas.width/buf.length;
@@ -287,83 +225,96 @@ async function startMic(){
   ensureAudio();
   try{
     const stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,autoGainControl:false,noiseSuppression:false}});
-    sourceNode=audioCtx.createMediaStreamSource(stream);
-    sourceNode.connect(gainNode);
+    micSource=audioCtx.createMediaStreamSource(stream);
+    micSource.connect(gainNode);
     isRunning=true;
     document.getElementById('toggleMic').textContent='■ STOP LIVE RPM';
     loop();
-  }catch(e){alert('Mic denied: '+e)}
+  }catch(e){statusEl.textContent='Mic denied: '+e; }
 }
 function stopMic(){
   if(raf) cancelAnimationFrame(raf);
-  if(sourceNode){try{sourceNode.mediaStream.getTracks().forEach(t=>t.stop())}catch{} try{sourceNode.disconnect()}catch{}}
+  if(micSource){try{micSource.mediaStream.getTracks().forEach(t=>t.stop())}catch{} try{micSource.disconnect()}catch{}}
+  if(fileSource){try{fileSource.disconnect()}catch{} fileSource=null; videoEl.pause();}
   isRunning=false;
   document.getElementById('toggleMic').textContent='▶ LIVE RPM TOGGLE';
 }
-
 document.getElementById('toggleMic').onclick=()=>{ if(isRunning) stopMic(); else startMic(); };
 
 document.getElementById('resetBtn').onclick=()=>{
   stopMic();
-  rpmEl.textContent='----';
-  freqEl.textContent='-- Hz';
-  tickCounter=0;
-  lastFreq=0;
-  tickEl.textContent='0';
-  firingEl.textContent='--';
-  rotBox.textContent='--';
-  fireBox.textContent='--';
-  freqBox.textContent='-- Hz';
-  engineTypeEl.value='4S-1';
-  updateFormula();
-  for(const k in baseMap){
-    const el=document.getElementById('c-'+k);
-    if(el) el.textContent='----';
-  }
+  rpmEl.textContent='----'; freqEl.textContent='-- Hz'; tickCounter=0; tickEl.textContent='0';
+  firingEl.textContent='--'; rotBox.textContent='--'; fireBox.textContent='--';
+  engineTypeEl.value='4S-1'; updateFormula();
+  statusEl.textContent='Reset done - RPM ---- and engine back to default';
 };
 
-// file upload
 const fileInput=document.getElementById('fileInput');
-const fileVideo=document.getElementById('fileVideo');
 const fileMeta=document.getElementById('fileMeta');
 const analyzeBtn=document.getElementById('analyzeFile');
 let fileObjectUrl=null;
+
 fileInput.addEventListener('change',()=>{
   const file=fileInput.files[0]; if(!file) return;
   if(fileObjectUrl) URL.revokeObjectURL(fileObjectUrl);
   fileObjectUrl=URL.createObjectURL(file);
-  fileVideo.src=fileObjectUrl;
-  fileVideo.style.display='block';
+  videoEl.src=fileObjectUrl;
+  videoEl.style.display='block';
   analyzeBtn.style.display='block';
-  fileMeta.textContent=`${file.name} • ${(file.size/1024/1024).toFixed(2)} MB`;
+  fileMeta.textContent=`${file.name} • ${(file.size/1024/1024).toFixed(2)} MB • ${file.type||'unknown'}`;
+  statusEl.textContent='File loaded - hit ANALYZE FILE';
+  // reset fileSource so new one can be created
+  if(fileSource){try{fileSource.disconnect()}catch{} fileSource=null;}
 });
-analyzeBtn.onclick=()=>{
+
+analyzeBtn.onclick=async()=>{
   ensureAudio();
-  if(sourceNode){try{sourceNode.disconnect()}catch{}}
-  sourceNode=audioCtx.createMediaElementSource(fileVideo);
-  sourceNode.connect(gainNode);
-  isRunning=true;
-  fileVideo.play();
-  loop();
+  // Important: resume context on user gesture
+  if(audioCtx.state==='suspended') await audioCtx.resume();
+  
+  // If we already created a MediaElementSource for this video element, we cannot create another - reuse it
+  if(!fileSource){
+    try{
+      fileSource=audioCtx.createMediaElementSource(videoEl);
+      fileSource.connect(gainNode);
+    }catch(e){
+      // If it fails because source already exists, try disconnect and recreate via clone
+      statusEl.textContent='Audio link error, recreating: '+e.message;
+      try{
+        const newVideo=videoEl.cloneNode(true);
+        newVideo.src=videoEl.src;
+        videoEl.parentNode.replaceChild(newVideo, videoEl);
+        // re-assign
+        window.fileVideo=newVideo;
+        fileSource=audioCtx.createMediaElementSource(newVideo);
+        fileSource.connect(gainNode);
+      }catch(e2){statusEl.textContent='Failed to link video audio: '+e2.message; return;}
+    }
+  }
+  
+  statusEl.textContent='Starting video analysis...';
+  videoEl.currentTime=0;
+  videoEl.muted=false;
+  videoEl.volume=1;
+  
+  try{
+    const playPromise=videoEl.play();
+    if(playPromise!==undefined){
+      await playPromise;
+      statusEl.textContent='Playing & analyzing - seconds should now count';
+      if(!isRunning){isRunning=true; loop();}
+    }
+  }catch(err){
+    statusEl.textContent='Play blocked: '+err.message+' - Tap video controls to play manually, analysis will still run';
+    // Even if play fails, start loop - user can manually press play on video controls
+    if(!isRunning){isRunning=true; loop();}
+  }
 };
 
-// features info
-document.getElementById('featuresInfo').textContent=`BASE CHECKLIST - All essentials present:
-✓ 1. Live RPM Toggle Button - #toggleMic
-✓ 2. Engine Selection Dropdown - 4-stroke single, twin, triple, 4 cyl, 6 cyl - #engineType
-✓ 3. Fan Selection Sub-Category - tri-blade slim blade, tri-blade wide, twin-blade slim, twin-blade wide
-✓ 4. Live Tick Counter - #tickCount increments per firing
-✓ 5. Live Firing & Rotation Box - #rotBox #fireBox #freqBox
-✓ 6. Quiet Motor Checkbox - #quietMode gain 3x
-✓ 7. Yellow Black Color and Style - topbar #FFEB00, black body
-✓ 8. Live Firing Data All Configs - #configTable shows all 9 configs simultaneously for cross-check
-✓ Upload Video/Sound - #fileInput supports MP4 MOV WAV etc.
-✓ Reset Button - #resetBtn sets RPM to ---- and engine to default
-✓ Removed 3600 demo - now shows ---- initially, no hardcoded 3600
-
-Default engine after reset: 4S-1 (4-stroke single)
-Current file: RPM_Sound_v2_Checked.html
-`;
+videoEl.addEventListener('timeupdate',()=>{
+  if(videoEl.currentTime>0) statusEl.textContent=`Analyzing: ${videoEl.currentTime.toFixed(1)}s / ${(videoEl.duration||0).toFixed(1)}s - RPM updating`;
+});
+videoEl.addEventListener('ended',()=>{ statusEl.textContent='Video ended - analysis stopped'; stopMic(); });
 </script>
 <script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-link-click",productId:productId},"*");return}e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:a.href},"*");return}var dataHref=findDataHref(target);if(dataHref&&/^https?:\/\//.test(dataHref.href)&&dataHref.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(dataHref.node,dataHref.href))return;e.preventDefault();parent.postMessage({type:"ecto:usercontent-link-click",href:dataHref.href},"*")}},true)})();</script><script>(function(){var FOCUS_TYPE="ecto:artifact-focus-request";var CLOSE_TYPE="ecto:artifact-close-request";function focusArtifactDocument(){var body=document.body;if(!body)return;try{window.focus();}catch(e){}if(!body.hasAttribute("tabindex"))body.setAttribute("tabindex","-1");try{body.focus({preventScroll:true});}catch(e){try{body.focus();}catch(e2){}}}window.addEventListener("message",function(event){if(event.source!==window.parent)return;var data=event.data;if(!data||typeof data!=="object"||data.type!==FOCUS_TYPE)return;if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",focusArtifactDocument,{once:true});return;}focusArtifactDocument();});window.addEventListener("keydown",function(event){if(event.key!=="Escape")return;window.setTimeout(function(){if(event.defaultPrevented)return;window.parent.postMessage({type:CLOSE_TYPE},"*");},0);});})();</script></body>
 </html>
