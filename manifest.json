@@ -1,12 +1,12 @@
 {
-  "name": "RPM Sound",
-  "short_name": "RPM Sound",
-  "description": "Live RPM via sound - engines and fans",
+  "name": "RPMsound",
+  "short_name": "RPMsound",
+  "description": "RPMsound - Generator RPM by sound - 4-stroke + fans",
+  "id": "./1.html",
   "start_url": "./1.html",
   "display": "standalone",
   "background_color": "#000000",
-  "theme_color": "#FFEB00",
-  "orientation": "portrait",
+  "theme_color": "#FFD400",
   "icons": [
     {
       "src": "icon-192.png",
